@@ -1,0 +1,54 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netstandard2.1</TargetFramework>
+
+		<ImplicitUsings>disable</ImplicitUsings>
+		<Nullable>disable</Nullable>
+
+		<AssemblyName>PeakIntiface</AssemblyName>
+		<RootNamespace>PeakIntiface</RootNamespace>
+		<ThunderstoreProfilePath>C:\Users\momo\AppData\Roaming\Thunderstore Mod Manager\DataFolder\PEAK\profiles\ButtplugDev</ThunderstoreProfilePath>
+		<CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+	</PropertyGroup>
+
+	<ItemGroup>
+	  <Reference Include="Assembly-CSharp">
+	    <HintPath>G:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\Assembly-CSharp.dll</HintPath>
+	    <Private>False</Private>
+	  </Reference>
+	  <Reference Include="BepInEx">
+	    <HintPath>C:\Users\momo\AppData\Roaming\Thunderstore Mod Manager\DataFolder\PEAK\profiles\ButtplugDev\BepInEx\core\BepInEx.dll</HintPath>
+	    <Private>False</Private>
+	  </Reference>
+	  <Reference Include="Buttplug">
+	    <HintPath>..\..\buttplug-csharp\Buttplug\bin\Release\netstandard2.1\Buttplug.dll</HintPath>
+	    <Private>True</Private>
+	  </Reference>
+	  <Reference Include="UnityEngine">
+	    <HintPath>G:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\UnityEngine.dll</HintPath>
+	    <Private>False</Private>
+	  </Reference>
+	  <Reference Include="UnityEngine.CoreModule">
+	    <HintPath>G:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\UnityEngine.CoreModule.dll</HintPath>
+	    <Private>False</Private>
+	  </Reference>
+	</ItemGroup>
+
+	<Target Name="CopyToThunderstore" AfterTargets="Build">
+
+		<PropertyGroup>
+			<ThunderstorePluginPath>
+				$(ThunderstoreProfilePath)\BepInEx\plugins\PeakIntiface
+			</ThunderstorePluginPath>
+		</PropertyGroup>
+
+		<MakeDir Directories="$(ThunderstorePluginPath)" />
+
+		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ThunderstorePluginPath)" SkipUnchangedFiles="true" />
+
+		<Copy SourceFiles="M:\Code Projects\buttplug-csharp\Buttplug\bin\Release\netstandard2.1\Buttplug.dll" DestinationFolder="$(ThunderstorePluginPath)" SkipUnchangedFiles="true" />
+
+	</Target>
+
+</Project>
