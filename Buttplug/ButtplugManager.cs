@@ -13,6 +13,7 @@ namespace PeakIntiface.Buttplug
 
         private ButtplugClient client;
         private bool shuttingDown = false;
+        private bool reconnecting = false;
 
         public bool IsConnected
         {
@@ -36,43 +37,23 @@ namespace PeakIntiface.Buttplug
 
         public async Task ConnectAsync(string ip, int port)
         {
-            if (IsConnected)
-            {
-                logger.LogInfo("Already connected to Intiface.");
-                return;
-            }
-
+            if (IsConnected || shuttingDown) return;
 
             string address = $"ws://{ip}:{port}";
-
             logger.LogInfo($"Connecting to {address}...");
-
 
             try
             {
-                client = new ButtplugClient(
-                    "PEAK Intiface"
-                );
+                client = new ButtplugClient("PEAK Intiface");
 
                 client.DeviceAdded += OnDeviceAdded;
                 client.DeviceRemoved += OnDeviceRemoved;
                 client.ScanningFinished += OnScanningFinished;
 
+                ButtplugWebsocketConnector connector =new ButtplugWebsocketConnector(new Uri(address));
+                await client.ConnectAsync(connector);
 
-                ButtplugWebsocketConnector connector =
-                    new ButtplugWebsocketConnector(
-                        new Uri(address)
-                    );
-
-
-                await client.ConnectAsync(
-                    connector
-                );
-
-
-                logger.LogInfo(
-                    "Connected to Intiface!"
-                );
+                logger.LogInfo("Connected to Intiface!");
 
                 await StartScanningAsync();
             }
@@ -85,7 +66,6 @@ namespace PeakIntiface.Buttplug
                 client = null;
             }
         }
-
         public async Task DisconnectAsync()
         {
             if (!IsConnected)
@@ -138,15 +118,28 @@ namespace PeakIntiface.Buttplug
                 client = null;
             }
         }
+        public async Task StartReconnecting(string ip, int port)
+        {
+            if (reconnecting) return;
 
-        private async void OnDeviceAdded(object sender, DeviceAddedEventArgs args)
+            reconnecting = true;
+
+            while (!shuttingDown)
+            {
+                if (!IsConnected) await ConnectAsync(ip, port);
+
+                await Task.Delay(5000);
+            }
+
+            reconnecting = false;
+        }
+
+        private void OnDeviceAdded(object sender, DeviceAddedEventArgs args)
         {
             if(shuttingDown) return;
             logger.LogInfo(
                 $"Device connected: {args.Device.Name}"
             );
-
-            await TestVibrationAsync();
         }
         private void OnDeviceRemoved(object sender, DeviceRemovedEventArgs args)
         {
@@ -167,13 +160,9 @@ namespace PeakIntiface.Buttplug
             if (shuttingDown) return;
             if (!IsConnected)
             {
-                logger.LogWarning(
-                    "Cannot scan because Intiface is not connected."
-                );
-
+                logger.LogWarning("Cannot scan because Intiface is not connected.");
                 return;
             }
-
 
             try
             {
@@ -292,87 +281,6 @@ namespace PeakIntiface.Buttplug
                 logger.LogInfo(
                     "Intiface shutdown complete."
                 );
-            }
-        }
-
-
-        public async Task TestVibrationAsync()
-        {
-            if (shuttingDown) return;
-            if (!IsConnected)
-            {
-                logger.LogWarning(
-                    "Cannot test vibration because Intiface is not connected."
-                );
-
-                return;
-            }
-
-
-            if (client.Devices.Length == 0)
-            {
-                logger.LogWarning(
-                    "Cannot test vibration because no devices are connected."
-                );
-
-                return;
-            }
-
-
-            double requestedIntensity = 0.20;
-
-            double maximumIntensity =
-                Plugin.MaximumIntensity.Value;
-
-            double actualIntensity =
-                Math.Min(
-                    requestedIntensity,
-                    maximumIntensity
-                );
-
-
-            logger.LogInfo(
-                $"Testing vibration at {actualIntensity:P0} for 1 second."
-            );
-
-
-            foreach (var device in client.Devices)
-            {
-                if (!device.HasOutput(OutputType.Vibrate))
-                {
-                    logger.LogInfo(
-                        $"Skipping {device.Name}: no vibration output."
-                    );
-
-                    continue;
-                }
-
-
-                try
-                {
-                    await device.RunOutputAsync(
-                        DeviceOutput.Vibrate.Percent(
-                            actualIntensity
-                        )
-                    );
-
-
-                    await Task.Delay(1000);
-
-
-                    await device.StopAsync();
-
-
-                    logger.LogInfo(
-                        $"Test completed on {device.Name}."
-                    );
-                }
-                catch (Exception ex)
-                {
-                    logger.LogError(
-                        $"Test failed on {device.Name}: {ex.Message}"
-                    );
-                }
             }
         }
     }

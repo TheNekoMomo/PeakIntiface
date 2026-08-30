@@ -13,6 +13,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	  <Compile Remove="ToyController.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <None Include="Toy\ToyController.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
 	  <Reference Include="Assembly-CSharp">
 	    <HintPath>G:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\Assembly-CSharp.dll</HintPath>
 	    <Private>False</Private>
@@ -24,6 +32,9 @@
 	  <Reference Include="Buttplug">
 	    <HintPath>..\..\buttplug-csharp\Buttplug\bin\Release\netstandard2.1\Buttplug.dll</HintPath>
 	    <Private>True</Private>
+	  </Reference>
+	  <Reference Include="PhotonUnityNetworking">
+	    <HintPath>G:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\PhotonUnityNetworking.dll</HintPath>
 	  </Reference>
 	  <Reference Include="UnityEngine">
 	    <HintPath>G:\Program Files (x86)\Steam\steamapps\common\PEAK\PEAK_Data\Managed\UnityEngine.dll</HintPath>
