@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using BepInEx.Logging;
+﻿using BepInEx.Logging;
 
 namespace PeakIntiface.Triggers
 {
@@ -20,35 +19,35 @@ namespace PeakIntiface.Triggers
             if (character == null) return;
             if (character.data == null) return;
 
-            if (character.data.isClimbing && Plugin.NormalClimbingTriggerEnabled.Value)
+            if (character.data.isClimbing && ConfigManager.NormalClimbingTriggerEnabled.Value)
             {
                 float currentStamina = character.data.currentStamina;
-                double intensity = Plugin.NormalClimbingTriggerMinimumIntensity.Value + 
-                    (1 - currentStamina) * (Plugin.NormalClimbingTriggerMaximumIntensity.Value - Plugin.NormalClimbingTriggerMinimumIntensity.Value);
+                double intensity = ConfigManager.NormalClimbingTriggerMinimumIntensity.Value + 
+                    (1 - currentStamina) * (ConfigManager.NormalClimbingTriggerMaximumIntensity.Value - ConfigManager.NormalClimbingTriggerMinimumIntensity.Value);
 
                 SetVibration(intensity);
             }
-            else if (character.data.isRopeClimbing && Plugin.RopeClimbingTriggerEnabled.Value)
+            else if (character.data.isRopeClimbing && ConfigManager.RopeClimbingTriggerEnabled.Value)
             {
                 float currentStamina = character.data.currentStamina;
-                double intensity = Plugin.RopeClimbingTriggerMinimumIntensity.Value + 
-                    (1 - currentStamina) * (Plugin.RopeClimbingTriggerMaximumIntensity.Value - Plugin.RopeClimbingTriggerMinimumIntensity.Value);
+                double intensity = ConfigManager.RopeClimbingTriggerMinimumIntensity.Value + 
+                    (1 - currentStamina) * (ConfigManager.RopeClimbingTriggerMaximumIntensity.Value - ConfigManager.RopeClimbingTriggerMinimumIntensity.Value);
 
                 SetVibration(intensity);
             }
-            else if (character.data.isVineClimbing && Plugin.VineClimbingTriggerEnabled.Value)
+            else if (character.data.isVineClimbing && ConfigManager.VineClimbingTriggerEnabled.Value)
             {
                 float currentStamina = character.data.currentStamina;
-                double intensity = Plugin.VineClimbingTriggerMinimumIntensity.Value + 
-                    (1 - currentStamina) * (Plugin.VineClimbingTriggerMaximumIntensity.Value - Plugin.VineClimbingTriggerMinimumIntensity.Value);
+                double intensity = ConfigManager.VineClimbingTriggerMinimumIntensity.Value + 
+                    (1 - currentStamina) * (ConfigManager.VineClimbingTriggerMaximumIntensity.Value - ConfigManager.VineClimbingTriggerMinimumIntensity.Value);
 
                 SetVibration(intensity);
             }
-            else if (character.data.isSprinting && Plugin.SprintingTriggerEnabled.Value)
+            else if (character.data.isSprinting && ConfigManager.SprintingTriggerEnabled.Value)
             {
                 float currentStamina = character.data.currentStamina;
-                double intensity = Plugin.SprintingTriggerMinimumIntensity.Value + 
-                    (1 - currentStamina) * (Plugin.SprintingTriggerMaximumIntensity.Value - Plugin.SprintingTriggerMinimumIntensity.Value);
+                double intensity = ConfigManager.SprintingTriggerMinimumIntensity.Value + 
+                    (1 - currentStamina) * (ConfigManager.SprintingTriggerMaximumIntensity.Value - ConfigManager.SprintingTriggerMinimumIntensity.Value);
 
                  SetVibration(intensity);
             }

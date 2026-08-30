@@ -26,7 +26,7 @@ namespace PeakIntiface.Toy
         public async void SetSourceIntensity(string source, double intensity)
         {
             // Clamp the intensity to the maximum value defined in the plugin configuration
-            double maximumIntensity = Plugin.MaximumIntensity.Value;
+            double maximumIntensity = ConfigManager.MaximumIntensity.Value;
             double clampedIntensity = Math.Max(0.0f, Math.Min(intensity, maximumIntensity));
             // Store the clamped intensity for the given source
             sourceIntensities[source] = clampedIntensity;

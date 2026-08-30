@@ -42,65 +42,65 @@ namespace PeakIntiface.Triggers
             switch (sTATUSTYPE)
             {
                 case CharacterAfflictions.STATUSTYPE.Injury:
-                    double InjuryIntensity = Plugin.InjuryTriggerMinimumIntensity.Value +
-                        amount * (Plugin.InjuryTriggerMaximumIntensity.Value - Plugin.InjuryTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, InjuryIntensity, Plugin.InjuryTriggerDuration.Value);
+                    double InjuryIntensity = ConfigManager.InjuryTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.InjuryTriggerMaximumIntensity.Value - ConfigManager.InjuryTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, InjuryIntensity, ConfigManager.InjuryTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Hunger:
-                    double hungerIntensity = Plugin.HungerTriggerMinimumIntensity.Value +
-                        amount * (Plugin.HungerTriggerMaximumIntensity.Value - Plugin.HungerTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, hungerIntensity, Plugin.HungerTriggerDuration.Value);
+                    double hungerIntensity = ConfigManager.HungerTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.HungerTriggerMaximumIntensity.Value - ConfigManager.HungerTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, hungerIntensity, ConfigManager.HungerTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Cold:
-                    double coldIntensity = Plugin.ColdTriggerMinimumIntensity.Value +
-                        amount * (Plugin.ColdTriggerMaximumIntensity.Value - Plugin.ColdTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, coldIntensity, Plugin.ColdTriggerDuration.Value);
+                    double coldIntensity = ConfigManager.ColdTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.ColdTriggerMaximumIntensity.Value - ConfigManager.ColdTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, coldIntensity, ConfigManager.ColdTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Poison:
-                    double poisonIntensity = Plugin.PoisonTriggerMinimumIntensity.Value +
-                        amount * (Plugin.PoisonTriggerMaximumIntensity.Value - Plugin.PoisonTriggerMinimumIntensity.Value);
+                    double poisonIntensity = ConfigManager.PoisonTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.PoisonTriggerMaximumIntensity.Value - ConfigManager.PoisonTriggerMinimumIntensity.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Curse:
-                    double curseIntensity = Plugin.CurseTriggerMinimumIntensity.Value +
-                        amount * (Plugin.CurseTriggerMaximumIntensity.Value - Plugin.CurseTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, curseIntensity, Plugin.CurseTriggerDuration.Value);
+                    double curseIntensity = ConfigManager.CurseTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.CurseTriggerMaximumIntensity.Value - ConfigManager.CurseTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, curseIntensity, ConfigManager.CurseTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Drowsy:
-                    double drowsyIntensity = Plugin.DrowsyTriggerMinimumIntensity.Value +
-                        amount * (Plugin.DrowsyTriggerMaximumIntensity.Value - Plugin.DrowsyTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, drowsyIntensity, Plugin.DrowsyTriggerDuration.Value);
+                    double drowsyIntensity = ConfigManager.DrowsyTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.DrowsyTriggerMaximumIntensity.Value - ConfigManager.DrowsyTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, drowsyIntensity, ConfigManager.DrowsyTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Weight:
                     break;
                 case CharacterAfflictions.STATUSTYPE.Hot:
-                    double hotIntensity = Plugin.HotTriggerMinimumIntensity.Value +
-                        amount * (Plugin.HotTriggerMaximumIntensity.Value - Plugin.HotTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, hotIntensity, Plugin.HotTriggerDuration.Value);
+                    double hotIntensity = ConfigManager.HotTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.HotTriggerMaximumIntensity.Value - ConfigManager.HotTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, hotIntensity, ConfigManager.HotTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Thorns:
-                    double thornsIntensity = Plugin.ThornsTriggerMinimumIntensity.Value +
-                        amount * (Plugin.ThornsTriggerMaximumIntensity.Value - Plugin.ThornsTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, thornsIntensity, Plugin.ThornsTriggerDuration.Value);
+                    double thornsIntensity = ConfigManager.ThornsTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.ThornsTriggerMaximumIntensity.Value - ConfigManager.ThornsTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, thornsIntensity, ConfigManager.ThornsTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Spores:
-                    double sporesIntensity = Plugin.SporesTriggerMinimumIntensity.Value +
-                        amount * (Plugin.SporesTriggerMaximumIntensity.Value - Plugin.SporesTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, sporesIntensity, Plugin.SporesTriggerDuration.Value);
+                    double sporesIntensity = ConfigManager.SporesTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.SporesTriggerMaximumIntensity.Value - ConfigManager.SporesTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, sporesIntensity, ConfigManager.SporesTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Web:
-                    double webIntensity = Plugin.WebTriggerMinimumIntensity.Value +
-                        amount * (Plugin.WebTriggerMaximumIntensity.Value - Plugin.WebTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, webIntensity, Plugin.WebTriggerDuration.Value);
+                    double webIntensity = ConfigManager.WebTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.WebTriggerMaximumIntensity.Value - ConfigManager.WebTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, webIntensity, ConfigManager.WebTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Arrow:
-                    double arrowIntensity = Plugin.ArrowTriggerMinimumIntensity.Value +
-                        amount * (Plugin.ArrowTriggerMaximumIntensity.Value - Plugin.ArrowTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, arrowIntensity, Plugin.ArrowTriggerDuration.Value);
+                    double arrowIntensity = ConfigManager.ArrowTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.ArrowTriggerMaximumIntensity.Value - ConfigManager.ArrowTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, arrowIntensity, ConfigManager.ArrowTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Petrify:
-                    double PetrifyIntensity = Plugin.PetrifyTriggerMinimumIntensity.Value +
-                        amount * (Plugin.PetrifyTriggerMaximumIntensity.Value - Plugin.PetrifyTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, PetrifyIntensity, Plugin.PetrifyTriggerDuration.Value);
+                    double PetrifyIntensity = ConfigManager.PetrifyTriggerMinimumIntensity.Value +
+                        amount * (ConfigManager.PetrifyTriggerMaximumIntensity.Value - ConfigManager.PetrifyTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, PetrifyIntensity, ConfigManager.PetrifyTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.FlyTrap:
                     break;
