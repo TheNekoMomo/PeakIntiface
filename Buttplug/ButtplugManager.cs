@@ -68,6 +68,8 @@ namespace PeakIntiface.Buttplug
         }
         public async Task DisconnectAsync()
         {
+            reconnecting = false;
+
             if (!IsConnected)
             {
                 return;
@@ -124,8 +126,9 @@ namespace PeakIntiface.Buttplug
 
             reconnecting = true;
 
-            while (!shuttingDown)
+            while (reconnecting)
             {
+                if (shuttingDown) break;
                 if (!IsConnected) await ConnectAsync(ip, port);
 
                 await Task.Delay(5000);

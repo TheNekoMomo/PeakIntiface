@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using BepInEx.Logging;
 
@@ -14,39 +15,67 @@ namespace PeakIntiface.Toy
         private readonly ManualLogSource logger;
         private readonly ButtplugManager buttplugManager;
 
+        private readonly Dictionary<string, double> sourceIntensities = new Dictionary<string, double>();
+
         public ToyController(ButtplugManager buttplugManager, ManualLogSource logger)
         {
             this.logger = logger;
             this.buttplugManager = buttplugManager;
         }
 
-        public async Task StartVibrationAsync(double intensity)
+        public async void SetSourceIntensity(string source, double intensity)
         {
-            if (!buttplugManager.IsConnected) return;
-
+            // Clamp the intensity to the maximum value defined in the plugin configuration
             double maximumIntensity = Plugin.MaximumIntensity.Value;
             double clampedIntensity = Math.Max(0.0f, Math.Min(intensity, maximumIntensity));
+            // Store the clamped intensity for the given source
+            sourceIntensities[source] = clampedIntensity;
 
+            await UpdateVibrationAsync();
+        }
+
+        private async Task UpdateVibrationAsync()
+        {
+            // Check if the ButtplugManager is connected before trying to control devices
+            if (!buttplugManager.IsConnected) return;
+
+            double highestIntensity = 0.0;
+            // Iterate through all source intensities to find the highest one
+            foreach (var sourceIntensity in sourceIntensities.Values)
+            {
+                if (sourceIntensity > highestIntensity)
+                {
+                    highestIntensity = sourceIntensity;
+                }
+            }
+
+            if (highestIntensity <= 0.0)
+            {
+                await StopVibrationAsync();
+                return;
+            }
+
+            // Iterate through all connected devices and send the vibration command
             foreach (ButtplugClientDevice device in buttplugManager.Client.Devices)
             {
+                // Check if the device supports vibration output before sending the command
                 if (!device.HasOutput(OutputType.Vibrate)) continue;
-
+                // Send the vibration command to the device and handle any exceptions that may occur
                 try
                 {
-                    await device.RunOutputAsync(DeviceOutput.Vibrate.Percent(clampedIntensity));
+                    await device.RunOutputAsync(DeviceOutput.Vibrate.Percent(highestIntensity));
                 }
                 catch (Exception ex)
                 {
                     logger.LogWarning($"Could not control {device.Name}: {ex.Message}");
-                    throw;
                 }
             }
         }
-
         public async Task StopVibrationAsync()
         {
-            if(!buttplugManager.IsConnected) return;
-
+            // Check if the ButtplugManager is connected before trying to stop devices
+            if (!buttplugManager.IsConnected) return;
+            // Attempt to stop all devices and handle any exceptions that may occur
             try
             {
                 await buttplugManager.Client.StopAllDevicesAsync();
@@ -54,7 +83,6 @@ namespace PeakIntiface.Toy
             catch (Exception ex)
             {
                 logger.LogWarning($"Could not stop devices: {ex.Message}");
-				throw;
             }
 		}
     }
