@@ -1,6 +1,6 @@
 {
   "name": "PeakIntiface",
-  "version_number": "0.1.0",
+  "version_number": "0.1.1",
   "website_url": "",
   "description": "Connects PEAK gameplay events to Intiface/Buttplug compatible devices.",
   "dependencies": [

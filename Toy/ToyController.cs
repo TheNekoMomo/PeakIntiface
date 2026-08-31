@@ -2,10 +2,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using BepInEx.Logging;
-
 using Buttplug.Client;
 using Buttplug.Core.Messages;
-
 using PeakIntiface.Buttplug;
 
 namespace PeakIntiface.Toy
@@ -40,13 +38,21 @@ namespace PeakIntiface.Toy
             if (!buttplugManager.IsConnected) return;
 
             double highestIntensity = 0.0;
+            string highestSource = "None";
+
             // Iterate through all source intensities to find the highest one
-            foreach (var sourceIntensity in sourceIntensities.Values)
+            foreach (KeyValuePair<string, double> sourceIntensity in sourceIntensities)
             {
-                if (sourceIntensity > highestIntensity)
+                if (sourceIntensity.Value > highestIntensity)
                 {
-                    highestIntensity = sourceIntensity;
+                    highestIntensity = sourceIntensity.Value;
+                    highestSource = sourceIntensity.Key;
                 }
+            }
+
+            if (highestIntensity > 0)
+            {
+                logger.LogInfo($"Toy output: {highestIntensity * 100}% from {highestSource}");
             }
 
             if (highestIntensity <= 0.0)

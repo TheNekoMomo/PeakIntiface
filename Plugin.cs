@@ -4,7 +4,6 @@ using PeakIntiface.Buttplug;
 using PeakIntiface.Toy;
 using PeakIntiface.Triggers;
 
-
 namespace PeakIntiface
 {
     [BepInPlugin(PluginGuid, PluginName, PluginVersion)]
@@ -12,7 +11,7 @@ namespace PeakIntiface
     {
         public const string PluginGuid = "momo.peakintiface";
         public const string PluginName = "PEAK Intiface";
-        public const string PluginVersion = "0.1.0";
+        public const string PluginVersion = "0.1.1";
 
         public static ButtplugManager ButtplugManager;
         public static ToyController ToyController;
@@ -24,7 +23,7 @@ namespace PeakIntiface
         {
             Logger.LogInfo($"{PluginName} v{PluginVersion} loading...");
 
-            _ = new ConfigManager();
+            _ = new ConfigManager(Config);
 
             ButtplugManager = new ButtplugManager(Logger);
             if (ConfigManager.Enabled.Value) _ = ButtplugManager.StartReconnecting(ConfigManager.ServerIP.Value, ConfigManager.ServerPort.Value);
@@ -47,20 +46,13 @@ namespace PeakIntiface
 
         private void OnApplicationQuit()
         {
-            if (ButtplugManager == null)
-            {
-                return;
-            }
+            if (ButtplugManager == null) return;
 
-            Logger.LogInfo(
-                "PEAK is closing. Shutting down Intiface..."
-            );
-
+            Logger.LogInfo("PEAK is closing. Shutting down Intiface...");
 
             try
             {
-                Task shutdownTask =
-                    ButtplugManager.ShutdownAsync();
+                Task shutdownTask = ButtplugManager.ShutdownAsync();
 
                 if (!shutdownTask.Wait(2000))
                 {

@@ -42,64 +42,73 @@ namespace PeakIntiface.Triggers
             switch (sTATUSTYPE)
             {
                 case CharacterAfflictions.STATUSTYPE.Injury:
-                    double InjuryIntensity = ConfigManager.InjuryTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.InjuryTriggerMaximumIntensity.Value - ConfigManager.InjuryTriggerMinimumIntensity.Value);
+                    if (!ConfigManager.InjuryTriggerEnabled.Value) break;
+                    double InjuryIntensity = CalculateIntensity(amount, 
+                        ConfigManager.InjuryTriggerMaximumIntensity.Value, ConfigManager.InjuryTriggerMinimumIntensity.Value);
                     _ = HandleAfflictionIntensity(sTATUSTYPE, InjuryIntensity, ConfigManager.InjuryTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Hunger:
-                    double hungerIntensity = ConfigManager.HungerTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.HungerTriggerMaximumIntensity.Value - ConfigManager.HungerTriggerMinimumIntensity.Value);
-                    _ = HandleAfflictionIntensity(sTATUSTYPE, hungerIntensity, ConfigManager.HungerTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Cold:
+                    if (!ConfigManager.ColdTriggerEnabled.Value) break;
                     double coldIntensity = ConfigManager.ColdTriggerMinimumIntensity.Value +
                         amount * (ConfigManager.ColdTriggerMaximumIntensity.Value - ConfigManager.ColdTriggerMinimumIntensity.Value);
                     _ = HandleAfflictionIntensity(sTATUSTYPE, coldIntensity, ConfigManager.ColdTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Poison:
-                    double poisonIntensity = ConfigManager.PoisonTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.PoisonTriggerMaximumIntensity.Value - ConfigManager.PoisonTriggerMinimumIntensity.Value);
+                    if (!ConfigManager.PoisonTriggerEnabled.Value) break;
+                    double poisonIntensity = CalculateIntensity(amount,
+                        ConfigManager.PoisonTriggerMaximumIntensity.Value, ConfigManager.PoisonTriggerMinimumIntensity.Value);
+                    _ = HandleAfflictionIntensity(sTATUSTYPE, poisonIntensity, ConfigManager.PoisonTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Curse:
-                    double curseIntensity = ConfigManager.CurseTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.CurseTriggerMaximumIntensity.Value - ConfigManager.CurseTriggerMinimumIntensity.Value);
+                    if (!ConfigManager.CurseTriggerEnabled.Value) break;
+                    double curseIntensity = CalculateIntensity(amount,
+                        ConfigManager.CurseTriggerMaximumIntensity.Value, ConfigManager.CurseTriggerMinimumIntensity.Value);
                     _ = HandleAfflictionIntensity(sTATUSTYPE, curseIntensity, ConfigManager.CurseTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Drowsy:
-                    double drowsyIntensity = ConfigManager.DrowsyTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.DrowsyTriggerMaximumIntensity.Value - ConfigManager.DrowsyTriggerMinimumIntensity.Value);
+                    if (!ConfigManager.DrowsyTriggerEnabled.Value) break;
+                    double drowsyIntensity = CalculateIntensity(amount,
+                        ConfigManager.DrowsyTriggerMaximumIntensity.Value, ConfigManager.DrowsyTriggerMinimumIntensity.Value);
                     _ = HandleAfflictionIntensity(sTATUSTYPE, drowsyIntensity, ConfigManager.DrowsyTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Weight:
                     break;
                 case CharacterAfflictions.STATUSTYPE.Hot:
-                    double hotIntensity = ConfigManager.HotTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.HotTriggerMaximumIntensity.Value - ConfigManager.HotTriggerMinimumIntensity.Value);
+                    if (!ConfigManager.HotTriggerEnabled.Value) break;
+                    double hotIntensity = CalculateIntensity(amount,
+                        ConfigManager.HotTriggerMaximumIntensity.Value, ConfigManager.HotTriggerMinimumIntensity.Value);
                     _ = HandleAfflictionIntensity(sTATUSTYPE, hotIntensity, ConfigManager.HotTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Thorns:
-                    double thornsIntensity = ConfigManager.ThornsTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.ThornsTriggerMaximumIntensity.Value - ConfigManager.ThornsTriggerMinimumIntensity.Value);
+                    if (ConfigManager.ThornsTriggerEnabled.Value) break;
+                    double thornsIntensity = CalculateIntensity(amount,
+                        ConfigManager.ThornsTriggerMaximumIntensity.Value, ConfigManager.ThornsTriggerMinimumIntensity.Value);
                     _ = HandleAfflictionIntensity(sTATUSTYPE, thornsIntensity, ConfigManager.ThornsTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Spores:
-                    double sporesIntensity = ConfigManager.SporesTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.SporesTriggerMaximumIntensity.Value - ConfigManager.SporesTriggerMinimumIntensity.Value);
+                    if (!ConfigManager.SporesTriggerEnabled.Value) break;
+                    double sporesIntensity = CalculateIntensity(amount,
+                        ConfigManager.SporesTriggerMaximumIntensity.Value, ConfigManager.SporesTriggerMinimumIntensity.Value);
                     _ = HandleAfflictionIntensity(sTATUSTYPE, sporesIntensity, ConfigManager.SporesTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Web:
-                    double webIntensity = ConfigManager.WebTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.WebTriggerMaximumIntensity.Value - ConfigManager.WebTriggerMinimumIntensity.Value);
+                    if (!ConfigManager.WebTriggerEnabled.Value) break;
+                    double webIntensity = CalculateIntensity(amount,
+                        ConfigManager.WebTriggerMaximumIntensity.Value, ConfigManager.WebTriggerMinimumIntensity.Value);
                     _ = HandleAfflictionIntensity(sTATUSTYPE, webIntensity, ConfigManager.WebTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Arrow:
-                    double arrowIntensity = ConfigManager.ArrowTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.ArrowTriggerMaximumIntensity.Value - ConfigManager.ArrowTriggerMinimumIntensity.Value);
+                    if (!ConfigManager.ArrowTriggerEnabled.Value) break;
+                    double arrowIntensity = CalculateIntensity(amount,
+                        ConfigManager.ArrowTriggerMaximumIntensity.Value, ConfigManager.ArrowTriggerMinimumIntensity.Value);
                     _ = HandleAfflictionIntensity(sTATUSTYPE, arrowIntensity, ConfigManager.ArrowTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.Petrify:
-                    double PetrifyIntensity = ConfigManager.PetrifyTriggerMinimumIntensity.Value +
-                        amount * (ConfigManager.PetrifyTriggerMaximumIntensity.Value - ConfigManager.PetrifyTriggerMinimumIntensity.Value);
+                    if (ConfigManager.PetrifyTriggerEnabled.Value) break;
+                    double PetrifyIntensity = CalculateIntensity(amount,
+                        ConfigManager.PetrifyTriggerMaximumIntensity.Value, ConfigManager.PetrifyTriggerMinimumIntensity.Value);
                     _ = HandleAfflictionIntensity(sTATUSTYPE, PetrifyIntensity, ConfigManager.PetrifyTriggerDuration.Value);
                     break;
                 case CharacterAfflictions.STATUSTYPE.FlyTrap:
@@ -135,6 +144,11 @@ namespace PeakIntiface.Triggers
 
             timer.Dispose();
             afflictionIntensities.Remove(sTATUSTYPE);
+        }
+
+        private double CalculateIntensity(float intensity, float maximum, float minimum)
+        {
+            return minimum + (intensity * 2) * (maximum - minimum);
         }
     }
 }

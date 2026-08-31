@@ -35,7 +35,26 @@ namespace PeakIntiface.Buttplug
             this.logger = logger;
         }
 
-        public async Task ConnectAsync(string ip, int port)
+        public async Task StartReconnecting(string ip, int port)
+        {
+            if (reconnecting) return;
+            reconnecting = true;
+
+            while (reconnecting)
+            {
+                if (shuttingDown) break;
+
+                if (!IsConnected)
+                {
+                    logger.LogInfo("Retrying reconnecting");
+                    await ConnectAsync(ip, port);
+                }
+
+                await Task.Delay(5000);
+            }
+            reconnecting = false;
+        }
+        private async Task ConnectAsync(string ip, int port)
         {
             if (IsConnected || shuttingDown) return;
 
@@ -48,21 +67,17 @@ namespace PeakIntiface.Buttplug
 
                 client.DeviceAdded += OnDeviceAdded;
                 client.DeviceRemoved += OnDeviceRemoved;
-                client.ScanningFinished += OnScanningFinished;
 
                 ButtplugWebsocketConnector connector =new ButtplugWebsocketConnector(new Uri(address));
                 await client.ConnectAsync(connector);
 
                 logger.LogInfo("Connected to Intiface!");
 
-                await StartScanningAsync();
+                await client.StartScanningAsync();
             }
             catch (Exception ex)
             {
-                logger.LogError(
-                    $"Could not connect to Intiface: {ex}"
-                );
-
+                logger.LogError($"Could not connect to Intiface");
                 client = null;
             }
         }
@@ -120,95 +135,18 @@ namespace PeakIntiface.Buttplug
                 client = null;
             }
         }
-        public async Task StartReconnecting(string ip, int port)
-        {
-            if (reconnecting) return;
-
-            reconnecting = true;
-
-            while (reconnecting)
-            {
-                if (shuttingDown) break;
-                if (!IsConnected) await ConnectAsync(ip, port);
-
-                await Task.Delay(5000);
-            }
-
-            reconnecting = false;
-        }
 
         private void OnDeviceAdded(object sender, DeviceAddedEventArgs args)
         {
             if(shuttingDown) return;
-            logger.LogInfo(
-                $"Device connected: {args.Device.Name}"
-            );
+            logger.LogInfo($"Device connected: {args.Device.Name}");
         }
         private void OnDeviceRemoved(object sender, DeviceRemovedEventArgs args)
         {
             if (shuttingDown) return;
-            logger.LogInfo(
-                $"Device disconnected: {args.Device.Name}"
-            );
-        }
-        private void OnScanningFinished(object sender, EventArgs args)
-        {
-            logger.LogInfo(
-                "Device scanning finished."
-            );
+            logger.LogInfo($"Device disconnected: {args.Device.Name}");
         }
 
-        public async Task StartScanningAsync()
-        {
-            if (shuttingDown) return;
-            if (!IsConnected)
-            {
-                logger.LogWarning("Cannot scan because Intiface is not connected.");
-                return;
-            }
-
-            try
-            {
-                logger.LogInfo(
-                    "Starting device scan..."
-                );
-
-                await client.StartScanningAsync();
-
-                logger.LogInfo(
-                    "Device scan started."
-                );
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(
-                    $"Could not start device scan: {ex.Message}"
-                );
-            }
-        }
-        public async Task StopScanningAsync()
-        {
-            if (!IsConnected)
-            {
-                return;
-            }
-
-
-            try
-            {
-                await client.StopScanningAsync();
-
-                logger.LogInfo(
-                    "Device scan stopped."
-                );
-            }
-            catch (Exception ex)
-            {
-                logger.LogError(
-                    $"Could not stop device scan: {ex.Message}"
-                );
-            }
-        }
         public async Task ShutdownAsync()
         {
             if (shuttingDown)
