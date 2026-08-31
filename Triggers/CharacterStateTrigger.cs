@@ -30,9 +30,9 @@ namespace PeakIntiface.Triggers
             bool isPassedOut = character.data.passedOut || character.data.fullyPassedOut;
             bool isRagdoll = character.data.fallSeconds > 0f;
 
-            if (isDead && !alreadyDead) OnDeath();
-            if (isPassedOut && !alreadyPassedOut) OnPassOut();
-            if (isRagdoll && !alreadyRagdoll) OnRagdoll();
+            if (isDead && !alreadyDead && ConfigManager.DeadEnabled.Value) OnDeath();
+            if (isPassedOut && !alreadyPassedOut && ConfigManager.PassedOutEnabled.Value) OnPassOut();
+            if (isRagdoll && !alreadyRagdoll && ConfigManager.RagdollEnabled.Value) OnRagdoll();
 
             alreadyDead = isDead;
             alreadyPassedOut = isPassedOut;
@@ -41,17 +41,17 @@ namespace PeakIntiface.Triggers
 
         private void OnDeath()
         {
-            throw new NotImplementedException();
+            _ = StartTimedVibration("Death", ConfigManager.DeadIntensity.Value, ConfigManager.DeadTime.Value);
         }
 
         private void OnPassOut()
         {
-            throw new NotImplementedException();
+            _ = StartTimedVibration("PassOut", ConfigManager.PassedOutIntensity.Value, ConfigManager.PassedOutTime.Value);
         }
 
         private void OnRagdoll()
         {
-            _ = StartTimedVibration("Ragdoll", 0.3f, 1000);
+            _ = StartTimedVibration("Ragdoll", ConfigManager.RagdollIntensity.Value, ConfigManager.RagdollTime.Value);
         }
 
         private async Task StartTimedVibration(string VibrationSource, double intensity, float durationMilliseconds)
