@@ -52,20 +52,15 @@ namespace PeakIntiface
 
             try
             {
-                Task shutdownTask = ButtplugManager.ShutdownAsync();
-
-                if (!shutdownTask.Wait(2000))
+                Task disconnectTask = ButtplugManager.DisconnectAsync();
+                if (!disconnectTask.Wait(2000))
                 {
-                    Logger.LogWarning(
-                        "Intiface shutdown timed out. Allowing PEAK to close."
-                    );
+                    Logger.LogWarning("Intiface shutdown timed out. Allowing PEAK to close.");
                 }
             }
             catch (System.Exception ex)
             {
-                Logger.LogWarning(
-                    $"Error during Intiface shutdown: {ex.Message}"
-                );
+                Logger.LogWarning($"Error during Intiface shutdown: {ex.Message}");
             }
         }
     }

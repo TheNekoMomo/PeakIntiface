@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using BepInEx.Logging;
 using Buttplug.Client;
-using Buttplug.Core.Messages;
-
 
 namespace PeakIntiface.Buttplug
 {
@@ -12,23 +10,10 @@ namespace PeakIntiface.Buttplug
         private readonly ManualLogSource logger;
 
         private ButtplugClient client;
-        private bool shuttingDown = false;
         private bool reconnecting = false;
 
-        public bool IsConnected
-        {
-            get
-            {
-                return client != null && client.Connected;
-            }
-        }
-        public ButtplugClient Client
-        {
-            get
-            {
-                return client;
-            }
-        }
+        public bool IsConnected { get { return client != null && client.Connected; } }
+        public ButtplugClient Client { get { return client; } }
 
         public ButtplugManager(ManualLogSource logger)
         {
@@ -42,8 +27,6 @@ namespace PeakIntiface.Buttplug
 
             while (reconnecting)
             {
-                if (shuttingDown) break;
-
                 if (!IsConnected)
                 {
                     logger.LogInfo("Retrying reconnecting");
@@ -56,7 +39,7 @@ namespace PeakIntiface.Buttplug
         }
         private async Task ConnectAsync(string ip, int port)
         {
-            if (IsConnected || shuttingDown) return;
+            if (IsConnected) return;
 
             string address = $"ws://{ip}:{port}";
             logger.LogInfo($"Connecting to {address}...");
@@ -75,7 +58,7 @@ namespace PeakIntiface.Buttplug
 
                 await client.StartScanningAsync();
             }
-            catch (Exception ex)
+            catch
             {
                 logger.LogError($"Could not connect to Intiface");
                 client = null;
@@ -85,50 +68,29 @@ namespace PeakIntiface.Buttplug
         {
             reconnecting = false;
 
-            if (!IsConnected)
-            {
-                return;
-            }
+            if (!IsConnected) return;
 
             try
             {
                 try
                 {
-                    await client
-                        .StopScanningAsync()
-                        .ConfigureAwait(false);
+                    await client.StopScanningAsync().ConfigureAwait(false);
                 }
-                catch
-                {
-                    // Scanner may already be stopped.
-                }
-
+                catch { }
 
                 try
                 {
-                    await client
-                        .StopAllDevicesAsync()
-                        .ConfigureAwait(false);
+                    await client.StopAllDevicesAsync().ConfigureAwait(false);
                 }
-                catch
-                {
-                    // Continue disconnecting even if stopping failed.
-                }
+                catch { }
 
+                await client.DisconnectAsync().ConfigureAwait(false);
 
-                await client
-                    .DisconnectAsync()
-                    .ConfigureAwait(false);
-
-                logger.LogInfo(
-                    "Disconnected from Intiface."
-                );
+                logger.LogInfo("Disconnected from Intiface.");
             }
             catch (Exception ex)
             {
-                logger.LogWarning(
-                    $"Error disconnecting from Intiface: {ex.Message}"
-                );
+                logger.LogWarning($"Error disconnecting from Intiface: {ex.Message}");
             }
             finally
             {
@@ -138,91 +100,11 @@ namespace PeakIntiface.Buttplug
 
         private void OnDeviceAdded(object sender, DeviceAddedEventArgs args)
         {
-            if(shuttingDown) return;
             logger.LogInfo($"Device connected: {args.Device.Name}");
         }
         private void OnDeviceRemoved(object sender, DeviceRemovedEventArgs args)
         {
-            if (shuttingDown) return;
             logger.LogInfo($"Device disconnected: {args.Device.Name}");
-        }
-
-        public async Task ShutdownAsync()
-        {
-            if (shuttingDown)
-            {
-                return;
-            }
-
-            shuttingDown = true;
-
-            logger.LogInfo("Shutting down Intiface connection...");
-
-            if (client == null)
-            {
-                return;
-            }
-
-            try
-            {
-                if (client.Connected)
-                {
-                    try
-                    {
-                        logger.LogInfo("Stopping device scan...");
-
-                        await client
-                            .StopScanningAsync()
-                            .ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogWarning(
-                            $"Could not stop scanning: {ex.Message}"
-                        );
-                    }
-
-
-                    try
-                    {
-                        logger.LogInfo("Stopping all devices...");
-
-                        await client
-                            .StopAllDevicesAsync()
-                            .ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogWarning(
-                            $"Could not stop devices: {ex.Message}"
-                        );
-                    }
-
-
-                    try
-                    {
-                        logger.LogInfo("Disconnecting from Intiface...");
-
-                        await client
-                            .DisconnectAsync()
-                            .ConfigureAwait(false);
-                    }
-                    catch (Exception ex)
-                    {
-                        logger.LogWarning(
-                            $"Could not disconnect cleanly: {ex.Message}"
-                        );
-                    }
-                }
-            }
-            finally
-            {
-                client = null;
-
-                logger.LogInfo(
-                    "Intiface shutdown complete."
-                );
-            }
         }
     }
 }
