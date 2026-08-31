@@ -58,7 +58,6 @@ namespace PeakIntiface
                     Logger.LogWarning("Intiface shutdown timed out. Allowing PEAK to close.");
                 }
             }
-            catch (System.Exception ex) when (ex.Message.Contains("A task may only be disposed")) { }
             catch (System.Exception ex)
             {
                 Logger.LogWarning($"Error during Intiface shutdown: {ex.Message}");
