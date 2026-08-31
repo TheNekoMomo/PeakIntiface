@@ -23,6 +23,12 @@ namespace PeakIntiface.Triggers
             // Check if the local character is valid and has afflictions
             Character character = Character.localCharacter;
             if (character == null || character.refs.afflictions == null) return;
+
+            if (character.data != null && character.data.isCarried && character.data.carrier != null)
+            {
+                character = character.data.carrier;
+            }
+
             // Check if the character has changed
             if (subscribedCharacter == character) return;
 

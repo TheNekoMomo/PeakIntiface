@@ -19,6 +19,11 @@ namespace PeakIntiface.Triggers
             if (character == null) return;
             if (character.data == null) return;
 
+            if (character.data.isCarried && character.data.carrier != null)
+            {
+                character = character.data.carrier;
+            }
+
             if (character.data.isClimbing && ConfigManager.NormalClimbingTriggerEnabled.Value)
             {
                 float currentStamina = character.data.currentStamina;
@@ -48,7 +53,6 @@ namespace PeakIntiface.Triggers
                 float currentStamina = character.data.currentStamina;
                 double intensity = ConfigManager.SprintingTriggerMinimumIntensity.Value + 
                     (1 - currentStamina) * (ConfigManager.SprintingTriggerMaximumIntensity.Value - ConfigManager.SprintingTriggerMinimumIntensity.Value);
-
                  SetVibration(intensity);
             }
             else
