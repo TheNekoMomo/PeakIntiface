@@ -90,7 +90,7 @@ namespace PeakIntiface.Buttplug
             }
             catch (Exception ex)
             {
-                logger.LogWarning($"Error disconnecting from Intiface: {ex.Message}");
+                logger.LogWarning($"Error disconnecting from Intiface: {ex}");
             }
             finally
             {
