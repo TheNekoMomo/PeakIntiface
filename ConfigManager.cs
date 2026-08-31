@@ -14,6 +14,9 @@ namespace PeakIntiface
         public static ConfigEntry<string> ServerIP;
         public static ConfigEntry<int> ServerPort;
         public static ConfigEntry<float> MaximumIntensity;
+        // Config for when caried or watching a player
+        public static ConfigEntry<bool> UseCarried;
+        public static ConfigEntry<bool> UseSpectate;
         // Config entries for movement triggers
         public static ConfigEntry<bool> NormalClimbingTriggerEnabled;
         public static ConfigEntry<float> NormalClimbingTriggerMaximumIntensity;
@@ -98,6 +101,11 @@ namespace PeakIntiface
                 new ConfigDescription("Maximumtoy intensity from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
             ServerIP = config.Bind("Connection", "ServerIP", "127.0.0.1", "IP address of the Intiface Server");
             ServerPort = config.Bind("Connection", "ServerPort", 12345, "Port of the Intiface Server");
+
+            UseCarried = config.Bind(new ConfigDefinition("Use Carried Stats", "UseCarried"), true, 
+                new ConfigDescription("Use the player who is carring you for triggers"));
+            UseSpectate = config.Bind(new ConfigDefinition("Use Spectate Stats", "UseSpectate"), true,
+                new ConfigDescription("Use the player who you are Spectating for triggers"));
 
             // Load movement trigger settings
             // Normal Climbing Trigger

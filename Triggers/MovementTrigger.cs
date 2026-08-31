@@ -14,56 +14,34 @@ namespace PeakIntiface.Triggers
         public void Update()
         {
             if (Plugin.ToyController == null) return;
-            // Get the local character data and check if it's null (Could be the case when the player is in a menu or loading screen)
-            Character character = Character.localCharacter;
+            // Get the character class for the player who is triggering events
+            Character character = TriggerUtils.GetCharacterForStats();
             if (character == null) return;
-            if (character.data == null) return;
 
-            if (character.data.isCarried && character.data.carrier != null)
-            {
-                character = character.data.carrier;
-            }
+            double intensity = 0.0;
+            float currentStamina = character.data.currentStamina;
 
             if (character.data.isClimbing && ConfigManager.NormalClimbingTriggerEnabled.Value)
             {
-                float currentStamina = character.data.currentStamina;
-                double intensity = ConfigManager.NormalClimbingTriggerMinimumIntensity.Value + 
-                    (1 - currentStamina) * (ConfigManager.NormalClimbingTriggerMaximumIntensity.Value - ConfigManager.NormalClimbingTriggerMinimumIntensity.Value);
-
-                SetVibration(intensity);
+                intensity = TriggerUtils.CalculateIntensity(currentStamina - 1,
+                    ConfigManager.NormalClimbingTriggerMaximumIntensity.Value, ConfigManager.NormalClimbingTriggerMinimumIntensity.Value);
             }
             else if (character.data.isRopeClimbing && ConfigManager.RopeClimbingTriggerEnabled.Value)
             {
-                float currentStamina = character.data.currentStamina;
-                double intensity = ConfigManager.RopeClimbingTriggerMinimumIntensity.Value + 
-                    (1 - currentStamina) * (ConfigManager.RopeClimbingTriggerMaximumIntensity.Value - ConfigManager.RopeClimbingTriggerMinimumIntensity.Value);
-
-                SetVibration(intensity);
+                intensity = TriggerUtils.CalculateIntensity(currentStamina - 1,
+                    ConfigManager.RopeClimbingTriggerMaximumIntensity.Value, ConfigManager.RopeClimbingTriggerMinimumIntensity.Value);
             }
             else if (character.data.isVineClimbing && ConfigManager.VineClimbingTriggerEnabled.Value)
             {
-                float currentStamina = character.data.currentStamina;
-                double intensity = ConfigManager.VineClimbingTriggerMinimumIntensity.Value + 
-                    (1 - currentStamina) * (ConfigManager.VineClimbingTriggerMaximumIntensity.Value - ConfigManager.VineClimbingTriggerMinimumIntensity.Value);
-
-                SetVibration(intensity);
+                intensity = TriggerUtils.CalculateIntensity(currentStamina - 1,
+                    ConfigManager.VineClimbingTriggerMaximumIntensity.Value, ConfigManager.VineClimbingTriggerMinimumIntensity.Value);
             }
             else if (character.data.isSprinting && ConfigManager.SprintingTriggerEnabled.Value)
             {
-                float currentStamina = character.data.currentStamina;
-                double intensity = ConfigManager.SprintingTriggerMinimumIntensity.Value + 
-                    (1 - currentStamina) * (ConfigManager.SprintingTriggerMaximumIntensity.Value - ConfigManager.SprintingTriggerMinimumIntensity.Value);
-                 SetVibration(intensity);
+                intensity = TriggerUtils.CalculateIntensity(currentStamina - 1,
+                    ConfigManager.SprintingTriggerMaximumIntensity.Value, ConfigManager.SprintingTriggerMinimumIntensity.Value);
             }
-            else
-            {
-                SetVibration(0.0);
-            }
-        }
-
-        private void SetVibration(double intensity)
-        {
-            Plugin.ToyController.SetSourceIntensity("movement", intensity);
+            TriggerUtils.SetVibration("movement", intensity);
         }
     }
 }

@@ -50,11 +50,6 @@ namespace PeakIntiface.Toy
                 }
             }
 
-            if (highestIntensity > 0)
-            {
-                //logger.LogInfo($"Toy output: {highestIntensity * 100}% from {highestSource}");
-            }
-
             if (highestIntensity <= 0.0)
             {
                 await StopVibrationAsync();
