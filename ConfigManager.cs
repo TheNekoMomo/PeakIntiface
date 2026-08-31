@@ -86,6 +86,19 @@ namespace PeakIntiface
         public static ConfigEntry<float> PetrifyTriggerMinimumIntensity;
         public static ConfigEntry<float> PetrifyTriggerDuration;
 
+        // Character States
+        public static ConfigEntry<bool> DeadEnabled;
+        public static ConfigEntry<float> DeadIntensity;
+        public static ConfigEntry<float> DeadTime;
+
+        public static ConfigEntry<bool> PassedOutEnabled;
+        public static ConfigEntry<float> PassedOutIntensity;
+        public static ConfigEntry<float> PassedOutTime;
+
+        public static ConfigEntry<bool> RagdollEnabled;
+        public static ConfigEntry<float> RagdollIntensity;
+        public static ConfigEntry<float> RagdollTime;
+
         public ConfigManager(ConfigFile config)
         {
             this.config = config;
@@ -97,130 +110,151 @@ namespace PeakIntiface
         {
             Enabled = config.Bind("General", "Enabled", true, "Enable or Disable toy control");
             Enabled.SettingChanged += EnabledSettingChnaged;
-            MaximumIntensity = config.Bind("General", "MaximumIntensity", 0.7f,
+            MaximumIntensity = config.Bind("General", "Maximum Intensity", 0.7f,
                 new ConfigDescription("Maximumtoy intensity from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            ServerIP = config.Bind("Connection", "ServerIP", "127.0.0.1", "IP address of the Intiface Server");
-            ServerPort = config.Bind("Connection", "ServerPort", 12345, "Port of the Intiface Server");
+            ServerIP = config.Bind("General", "Server IP", "127.0.0.1", "IP address of the Intiface Server");
+            ServerPort = config.Bind("General", "Server Port", 12345, "Port of the Intiface Server");
 
-            UseCarried = config.Bind(new ConfigDefinition("Use Carried Stats", "UseCarried"), true, 
+            UseCarried = config.Bind(new ConfigDefinition("Player State", "Use Carried"), true,
                 new ConfigDescription("Use the player who is carring you for triggers"));
-            UseSpectate = config.Bind(new ConfigDefinition("Use Spectate Stats", "UseSpectate"), true,
+            UseSpectate = config.Bind(new ConfigDefinition("Player State", "Use Spectate"), true,
                 new ConfigDescription("Use the player who you are Spectating for triggers"));
 
             // Load movement trigger settings
             // Normal Climbing Trigger
-            NormalClimbingTriggerEnabled = config.Bind("Triggers", "NormalClimbingTriggerEnabled", true, "Enable or Disable Normal Climbing Trigger");
-            NormalClimbingTriggerMaximumIntensity = config.Bind("Triggers", "NormalClimbingTriggerMaximumIntensity", 0.7f,
+            NormalClimbingTriggerEnabled = config.Bind("Movement", "Normal Climbing Trigger Enabled", true, "Enable or Disable Normal Climbing Trigger");
+            NormalClimbingTriggerMaximumIntensity = config.Bind("Movement", "Normal Climbing Trigger Maximum Intensity", 0.7f,
                 new ConfigDescription("Maximum intensity for Normal Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            NormalClimbingTriggerMinimumIntensity = config.Bind("Triggers", "NormalClimbingTriggerMinimumIntensity", 0.1f,
+            NormalClimbingTriggerMinimumIntensity = config.Bind("Movement", "Normal Climbing Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Normal Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
             // Rope Climbing Trigger
-            RopeClimbingTriggerEnabled = config.Bind("Triggers", "RopeClimbingTriggerEnabled", true, "Enable or Disable Rope Climbing Trigger");
-            RopeClimbingTriggerMaximumIntensity = config.Bind("Triggers", "RopeClimbingTriggerMaximumIntensity", 0.7f,
+            RopeClimbingTriggerEnabled = config.Bind("Movement", "Rope Climbing Trigger Enabled", true, "Enable or Disable Rope Climbing Trigger");
+            RopeClimbingTriggerMaximumIntensity = config.Bind("Movement", "Rope Climbing Trigger Maximum Intensity", 0.7f,
                 new ConfigDescription("Maximum intensity for Rope Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            RopeClimbingTriggerMinimumIntensity = config.Bind("Triggers", "RopeClimbingTriggerMinimumIntensity", 0.1f,
+            RopeClimbingTriggerMinimumIntensity = config.Bind("Movement", "Rope Climbing Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Rope Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
             // Vine Climbing Trigger
-            VineClimbingTriggerEnabled = config.Bind("Triggers", "VineClimbingTriggerEnabled", true, "Enable or Disable Vine Climbing Trigger");
-            VineClimbingTriggerMaximumIntensity = config.Bind("Triggers", "VineClimbingTriggerMaximumIntensity", 0.7f,
+            VineClimbingTriggerEnabled = config.Bind("Movement", "Vine Climbing Trigger Enabled", true, "Enable or Disable Vine Climbing Trigger");
+            VineClimbingTriggerMaximumIntensity = config.Bind("Movement", "Vine Climbing Trigger Maximum Intensity", 0.7f,
                 new ConfigDescription("Maximum intensity for Vine Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            VineClimbingTriggerMinimumIntensity = config.Bind("Triggers", "VineClimbingTriggerMinimumIntensity", 0.1f,
+            VineClimbingTriggerMinimumIntensity = config.Bind("Movement", "Vine Climbing Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Vine Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
             // Sprinting Trigger
-            SprintingTriggerEnabled = config.Bind("Triggers", "SprintingTriggerEnabled", true, "Enable or Disable Sprinting Trigger");
-            SprintingTriggerMaximumIntensity = config.Bind("Triggers", "SprintingTriggerMaximumIntensity", 0.7f,
+            SprintingTriggerEnabled = config.Bind("Movement", "Sprinting Trigger Enabled", true, "Enable or Disable Sprinting Trigger");
+            SprintingTriggerMaximumIntensity = config.Bind("Movement", "Sprinting Trigger Maximum Intensity", 0.7f,
                 new ConfigDescription("Maximum intensity for Sprinting Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            SprintingTriggerMinimumIntensity = config.Bind("Triggers", "SprintingTriggerMinimumIntensity", 0.1f,
+            SprintingTriggerMinimumIntensity = config.Bind("Movement", "Sprinting Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Sprinting Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
 
             // Load status effect trigger settings
-            InjuryTriggerEnabled = config.Bind("Triggers", "InjuryTriggerEnabled", true, "Enable or Disable Injury Trigger");
-            InjuryTriggerMaximumIntensity = config.Bind("Triggers", "InjuryTriggerMaximumIntensity", 0.5f,
+            InjuryTriggerEnabled = config.Bind("Triggers", "Injury Trigger Enabled", true, "Enable or Disable Injury Trigger");
+            InjuryTriggerMaximumIntensity = config.Bind("Triggers", "Injury Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Injury Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            InjuryTriggerMinimumIntensity = config.Bind("Triggers", "InjuryTriggerMinimumIntensity", 0.1f,
+            InjuryTriggerMinimumIntensity = config.Bind("Triggers", "Injury Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Injury Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            InjuryTriggerDuration = config.Bind("Triggers", "InjuryTriggerDuration", 5000f,
+            InjuryTriggerDuration = config.Bind("Triggers", "Injury Trigger Duration", 5000f,
                 new ConfigDescription("Duration for Injury Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
 
-            ColdTriggerEnabled = config.Bind("Triggers", "ColdTriggerEnabled", true, "Enable or Disable Cold Trigger");
-            ColdTriggerMaximumIntensity = config.Bind("Triggers", "ColdTriggerMaximumIntensity", 0.5f,
+            ColdTriggerEnabled = config.Bind("Triggers", "Cold Trigger Enabled", true, "Enable or Disable Cold Trigger");
+            ColdTriggerMaximumIntensity = config.Bind("Triggers", "Cold Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Cold Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            ColdTriggerMinimumIntensity = config.Bind("Triggers", "ColdTriggerMinimumIntensity", 0.1f,
+            ColdTriggerMinimumIntensity = config.Bind("Triggers", "Cold Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Cold Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            ColdTriggerDuration = config.Bind("Triggers", "ColdTriggerDuration", 1000f,
+            ColdTriggerDuration = config.Bind("Triggers", "Cold Trigger Duration", 1000f,
                 new ConfigDescription("Duration for Cold Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
 
-            PoisonTriggerEnabled = config.Bind("Triggers", "PoisonTriggerEnabled", true, "Enable or Disable Poison Trigger");
-            PoisonTriggerMaximumIntensity = config.Bind("Triggers", "PoisonTriggerMaximumIntensity", 0.5f,
+            PoisonTriggerEnabled = config.Bind("Triggers", "Poison Trigger Enabled", true, "Enable or Disable Poison Trigger");
+            PoisonTriggerMaximumIntensity = config.Bind("Triggers", "Poison Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Poison Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            PoisonTriggerMinimumIntensity = config.Bind("Triggers", "PoisonTriggerMinimumIntensity", 0.1f,
+            PoisonTriggerMinimumIntensity = config.Bind("Triggers", "Poison Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Poison Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            PoisonTriggerDuration = config.Bind("Triggers", "PoisonTriggerDuration", 3000f,
+            PoisonTriggerDuration = config.Bind("Triggers", "Poison Trigger Duration", 3000f,
                 new ConfigDescription("Duration for Poison Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
 
-            CurseTriggerEnabled = config.Bind("Triggers", "CurseTriggerEnabled", true, "Enable or Disable Curse Trigger");
-            CurseTriggerMaximumIntensity = config.Bind("Triggers", "CurseTriggerMaximumIntensity", 0.5f,
+            CurseTriggerEnabled = config.Bind("Triggers", "Curse Trigger Enabled", true, "Enable or Disable Curse Trigger");
+            CurseTriggerMaximumIntensity = config.Bind("Triggers", "Curse Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Curse Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            CurseTriggerMinimumIntensity = config.Bind("Triggers", "CurseTriggerMinimumIntensity", 0.1f,
+            CurseTriggerMinimumIntensity = config.Bind("Triggers", "Curse Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Curse Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            CurseTriggerDuration = config.Bind("Triggers", "CurseTriggerDuration", 5000f,
+            CurseTriggerDuration = config.Bind("Triggers", "Curse Trigger Duration", 5000f,
                 new ConfigDescription("Duration for Curse Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
 
-            DrowsyTriggerEnabled = config.Bind("Triggers", "DrowsyTriggerEnabled", true, "Enable or Disable Drowsy Trigger");
-            DrowsyTriggerMaximumIntensity = config.Bind("Triggers", "DrowsyTriggerMaximumIntensity", 0.5f,
+            DrowsyTriggerEnabled = config.Bind("Triggers", "Drowsy Trigger Enabled", true, "Enable or Disable Drowsy Trigger");
+            DrowsyTriggerMaximumIntensity = config.Bind("Triggers", "Drowsy Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Drowsy Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            DrowsyTriggerMinimumIntensity = config.Bind("Triggers", "DrowsyTriggerMinimumIntensity", 0.1f,
+            DrowsyTriggerMinimumIntensity = config.Bind("Triggers", "Drowsy Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Drowsy Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            DrowsyTriggerDuration = config.Bind("Triggers", "DrowsyTriggerDuration", 1000f,
+            DrowsyTriggerDuration = config.Bind("Triggers", "Drowsy Trigger Duration", 1000f,
                 new ConfigDescription("Duration for Drowsy Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
 
-            HotTriggerEnabled = config.Bind("Triggers", "HotTriggerEnabled", true, "Enable or Disable Hot Trigger");
-            HotTriggerMaximumIntensity = config.Bind("Triggers", "HotTriggerMaximumIntensity", 0.5f,
+            HotTriggerEnabled = config.Bind("Triggers", "Hot Trigger Enabled", true, "Enable or Disable Hot Trigger");
+            HotTriggerMaximumIntensity = config.Bind("Triggers", "Hot Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Hot Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            HotTriggerMinimumIntensity = config.Bind("Triggers", "HotTriggerMinimumIntensity", 0.1f,
+            HotTriggerMinimumIntensity = config.Bind("Triggers", "Hot Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Hot Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            HotTriggerDuration = config.Bind("Triggers", "HotTriggerDuration", 1000f,
+            HotTriggerDuration = config.Bind("Triggers", "Hot Trigger Duration", 1000f,
                 new ConfigDescription("Duration for Hot Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
 
-            ThornsTriggerEnabled = config.Bind("Triggers", "ThornsTriggerEnabled", true, "Enable or Disable Thorns Trigger");
-            ThornsTriggerMaximumIntensity = config.Bind("Triggers", "ThornsTriggerMaximumIntensity", 0.5f,
+            ThornsTriggerEnabled = config.Bind("Triggers", "Thorns Trigger Enabled", true, "Enable or Disable Thorns Trigger");
+            ThornsTriggerMaximumIntensity = config.Bind("Triggers", "Thorns Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Thorns Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            ThornsTriggerMinimumIntensity = config.Bind("Triggers", "ThornsTriggerMinimumIntensity", 0.1f,
+            ThornsTriggerMinimumIntensity = config.Bind("Triggers", "Thorns Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Thorns Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            ThornsTriggerDuration = config.Bind("Triggers", "ThornsTriggerDuration", 3000f,
+            ThornsTriggerDuration = config.Bind("Triggers", "Thorns Trigger Duration", 3000f,
                 new ConfigDescription("Duration for Thorns Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
 
-            SporesTriggerEnabled = config.Bind("Triggers", "SporesTriggerEnabled", true, "Enable or Disable Spores Trigger");
-            SporesTriggerMaximumIntensity = config.Bind("Triggers", "SporesTriggerMaximumIntensity", 0.5f,
+            SporesTriggerEnabled = config.Bind("Triggers", "Spores Trigger Enabled", true, "Enable or Disable Spores Trigger");
+            SporesTriggerMaximumIntensity = config.Bind("Triggers", "Spores Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Spores Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            SporesTriggerMinimumIntensity = config.Bind("Triggers", "SporesTriggerMinimumIntensity", 0.1f,
+            SporesTriggerMinimumIntensity = config.Bind("Triggers", "Spores Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Spores Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            SporesTriggerDuration = config.Bind("Triggers", "SporesTriggerDuration", 5000f,
+            SporesTriggerDuration = config.Bind("Triggers", "Spores Trigger Duration", 5000f,
                 new ConfigDescription("Duration for Spores Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
 
-            WebTriggerEnabled = config.Bind("Triggers", "WebTriggerEnabled", true, "Enable or Disable Web Trigger");
-            WebTriggerMaximumIntensity = config.Bind("Triggers", "WebTriggerMaximumIntensity", 0.5f,
+            WebTriggerEnabled = config.Bind("Triggers", "Web Trigger Enabled", true, "Enable or Disable Web Trigger");
+            WebTriggerMaximumIntensity = config.Bind("Triggers", "Web Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Web Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            WebTriggerMinimumIntensity = config.Bind("Triggers", "WebTriggerMinimumIntensity", 0.1f,
+            WebTriggerMinimumIntensity = config.Bind("Triggers", "Web Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Web Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            WebTriggerDuration = config.Bind("Triggers", "WebTriggerDuration", 2000f,
+            WebTriggerDuration = config.Bind("Triggers", "Web Trigger Duration", 2000f,
                 new ConfigDescription("Duration for Web Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
 
-            ArrowTriggerEnabled = config.Bind("Triggers", "ArrowTriggerEnabled", true, "Enable or Disable Arrow Trigger");
-            ArrowTriggerMaximumIntensity = config.Bind("Triggers", "ArrowTriggerMaximumIntensity", 0.5f,
+            ArrowTriggerEnabled = config.Bind("Triggers", "Arrow Trigger Enabled", true, "Enable or Disable Arrow Trigger");
+            ArrowTriggerMaximumIntensity = config.Bind("Triggers", "Arrow Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Arrow Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            ArrowTriggerMinimumIntensity = config.Bind("Triggers", "ArrowTriggerMinimumIntensity", 0.1f,
+            ArrowTriggerMinimumIntensity = config.Bind("Triggers", "Arrow Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Arrow Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            ArrowTriggerDuration = config.Bind("Triggers", "ArrowTriggerDuration", 5000f,
+            ArrowTriggerDuration = config.Bind("Triggers", "Arrow Trigger Duration", 5000f,
                 new ConfigDescription("Duration for Arrow Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
 
-            PetrifyTriggerEnabled = config.Bind("Triggers", "PetrifyTriggerEnabled", true, "Enable or Disable Petrify Trigger");
-            PetrifyTriggerMaximumIntensity = config.Bind("Triggers", "PetrifyTriggerMaximumIntensity", 0.5f,
+            PetrifyTriggerEnabled = config.Bind("Triggers", "Petrify Trigger Enabled", true, "Enable or Disable Petrify Trigger");
+            PetrifyTriggerMaximumIntensity = config.Bind("Triggers", "Petrify Trigger Maximum Intensity", 0.5f,
                 new ConfigDescription("Maximum intensity for Petrify Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            PetrifyTriggerMinimumIntensity = config.Bind("Triggers", "PetrifyTriggerMinimumIntensity", 0.1f,
+            PetrifyTriggerMinimumIntensity = config.Bind("Triggers", "Petrify Trigger Minimum Intensity", 0.1f,
                 new ConfigDescription("Minimum intensity for Petrify Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            PetrifyTriggerDuration = config.Bind("Triggers", "PetrifyTriggerDuration", 5000f,
+            PetrifyTriggerDuration = config.Bind("Triggers", "Petrify Trigger Duration", 5000f,
                 new ConfigDescription("Duration for Petrify Trigger in milliseconds", new AcceptableValueRange<float>(100f, 10000f)));
+
+            DeadEnabled = config.Bind(new ConfigDefinition("Player State", "Dead Enabled"), true,
+                new ConfigDescription("Enabled on death to trigger toy."));
+            DeadIntensity = config.Bind(new ConfigDefinition("Player State", "Dead Intensity"), 1f,
+                new ConfigDescription("How strong the toy should go when you die.", new AcceptableValueRange<float>(0.01f, 1f)));
+            DeadTime = config.Bind(new ConfigDefinition("Player State", "Dead Time"), 5000f,
+                new ConfigDescription("How strong the toy should go when you die.", new AcceptableValueRange<float>(100f, 10000f)));
+
+            PassedOutEnabled = config.Bind(new ConfigDefinition("Player State", "Passed Out Enabled"), true,
+                new ConfigDescription("Enabled on passing out to trigger toy."));
+            PassedOutIntensity = config.Bind(new ConfigDefinition("Player State", "Passed Out Intensity"), 1f,
+                new ConfigDescription("How strong the toy should go when you pass out.", new AcceptableValueRange<float>(0.01f, 1f)));
+            PassedOutTime = config.Bind(new ConfigDefinition("Player State", "Passed Out Time"), 5000f,
+                new ConfigDescription("How long the toy should go when you pass out.", new AcceptableValueRange<float>(100f, 10000f)));
+
+            RagdollEnabled = config.Bind(new ConfigDefinition("Player State", "Ragdoll Enabled"), true,
+                new ConfigDescription("Enabled on ragdoll to trigger toy."));
+            RagdollIntensity = config.Bind(new ConfigDefinition("Player State", "Ragdoll Intensity"), 1f,
+                new ConfigDescription("How strong the toy should go when you ragdoll.", new AcceptableValueRange<float>(0.01f, 1f)));
+            RagdollTime = config.Bind(new ConfigDefinition("Player State", "Ragdoll Time"), 5000f,
+                new ConfigDescription("How long the toy should go when you ragdoll.", new AcceptableValueRange<float>(100f, 10000f)));
         }
 
         public void EnabledSettingChnaged(object sender, System.EventArgs e)

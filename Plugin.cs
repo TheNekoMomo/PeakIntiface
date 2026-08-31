@@ -18,6 +18,7 @@ namespace PeakIntiface
 
         public static MovementTrigger MovementTrigger;
         public static StatustEffectTrigger StatustEffectTrigger;
+        public static CharacterStateTrigger CharacterStateTrigger;
 
         private void Awake()
         {
@@ -31,6 +32,7 @@ namespace PeakIntiface
 
             MovementTrigger = new MovementTrigger(Logger);
             StatustEffectTrigger = new StatustEffectTrigger(Logger);
+            CharacterStateTrigger = new CharacterStateTrigger(Logger);
 
             Logger.LogInfo($"Intiface Address: {ConfigManager.ServerIP.Value}:{ConfigManager.ServerPort.Value}");
             Logger.LogInfo($"{PluginName} Loaded!");
@@ -42,6 +44,7 @@ namespace PeakIntiface
             if (!ConfigManager.Enabled.Value || ToyController == null || !ButtplugManager.IsConnected) return;
             MovementTrigger?.Update();
             StatustEffectTrigger?.Update();
+            CharacterStateTrigger?.Update();
         }
 
         private void OnApplicationQuit()
