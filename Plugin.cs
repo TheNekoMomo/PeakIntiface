@@ -11,7 +11,7 @@ namespace PeakIntiface
     {
         public const string PluginGuid = "momo.peakintiface";
         public const string PluginName = "PEAK Intiface";
-        public const string PluginVersion = "0.1.1";
+        public const string PluginVersion = "0.2.0";
 
         public static ButtplugManager ButtplugManager;
         public static ToyController ToyController;
