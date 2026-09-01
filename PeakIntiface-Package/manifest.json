@@ -1,9 +1,9 @@
-{
-  "name": "PeakIntiface",
-  "description": "Connects PEAK gameplay events to Intiface/Buttplug compatible devices.",
-  "version_number": "0.2.1",
-  "dependencies": [
-    "BepInEx-BepInExPack_PEAK-5.4.75301"
-  ],
-  "website_url": "https://github.com/TheNekoMomo/PeakIntiface"
+﻿{
+    "name":  "PeakIntiface",
+    "description":  "Connects PEAK gameplay events to Intiface/Buttplug compatible devices.",
+    "version_number":  "0.2.2",
+    "dependencies":  [
+                         "BepInEx-BepInExPack_PEAK-5.4.75301"
+                     ],
+    "website_url":  "https://github.com/TheNekoMomo/PeakIntiface"
 }

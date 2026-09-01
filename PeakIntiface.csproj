@@ -46,20 +46,51 @@
 	  </Reference>
 	</ItemGroup>
 
-	<Target Name="CopyToThunderstore" AfterTargets="Build">
+	<PropertyGroup>
+		<PackageRoot>$(MSBuildProjectDirectory)\PeakIntiface-Package</PackageRoot>
+		<PackagePluginPath>$(PackageRoot)\BepInEx\plugins\PeakIntiface</PackagePluginPath>
+		<ManifestPath>$(PackageRoot)\manifest.json</ManifestPath>
+		<ThunderstorePluginPath>$(ThunderstoreProfilePath)\BepInEx\plugins\PeakIntiface</ThunderstorePluginPath>
+		<PluginSourcePath>$(MSBuildProjectDirectory)\Plugin.cs</PluginSourcePath>
+		<PackageOutputPath>$(MSBuildProjectDirectory)\Builds</PackageOutputPath>
+	</PropertyGroup>
 
-		<PropertyGroup>
-			<ThunderstorePluginPath>
-				$(ThunderstoreProfilePath)\BepInEx\plugins\PeakIntiface
-			</ThunderstorePluginPath>
-		</PropertyGroup>
+	<Target Name="UpdateManifestVersion" BeforeTargets="Build">
+		<Message Importance="high" Text="Updating manifest version from Plugin.cs..." />
+		<Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;$plugin = Get-Content -Raw '$(PluginSourcePath)'; $match = [regex]::Match($plugin, 'PluginVersion\s*=\s*\x22([^\x22]+)\x22'); if (!$match.Success) { throw 'Could not find PluginVersion in Plugin.cs' }; $version = $match.Groups[1].Value; $manifest = Get-Content -Raw '$(ManifestPath)' | ConvertFrom-Json; $manifest.version_number = $version; $manifest | ConvertTo-Json -Depth 20 | Set-Content -Encoding UTF8 '$(ManifestPath)'; Write-Host ('Manifest version updated to ' + $version)&quot;" />
+	</Target>
 
+	<Target Name="CopyModFiles"
+			AfterTargets="Build">
+
+		<Message Importance="high" Text="Copying PEAK Intiface DLLs..." />
+		<MakeDir Directories="$(PackagePluginPath)" />
 		<MakeDir Directories="$(ThunderstorePluginPath)" />
 
-		<Copy SourceFiles="$(TargetPath)" DestinationFolder="$(ThunderstorePluginPath)" SkipUnchangedFiles="true" />
+		<Copy
+			SourceFiles="$(TargetPath)"
+			DestinationFolder="$(PackagePluginPath)"
+			SkipUnchangedFiles="true" />
+		<Copy
+			SourceFiles="$(TargetPath)"
+			DestinationFolder="$(ThunderstorePluginPath)"
+			SkipUnchangedFiles="true" />
+		<Copy
+			SourceFiles="$(TargetDir)Buttplug.dll"
+			DestinationFolder="$(PackagePluginPath)"
+			SkipUnchangedFiles="true"
+			Condition="Exists('$(TargetDir)Buttplug.dll')" />
+		<Copy
+			SourceFiles="$(TargetDir)Buttplug.dll"
+			DestinationFolder="$(ThunderstorePluginPath)"
+			SkipUnchangedFiles="true"
+			Condition="Exists('$(TargetDir)Buttplug.dll')" />
+	</Target>
 
-		<Copy SourceFiles="M:\Code Projects\buttplug-csharp\Buttplug\bin\Release\netstandard2.1\Buttplug.dll" DestinationFolder="$(ThunderstorePluginPath)" SkipUnchangedFiles="true" />
-
+	<Target Name="CreatePackageZip" AfterTargets="CopyModFiles">
+		<MakeDir Directories="$(PackageOutputPath)" />
+		<Message Importance="high" Text="Creating Thunderstore package ZIP..." />
+		<Exec Command="powershell -NoProfile -ExecutionPolicy Bypass -Command &quot;$manifest = Get-Content -Raw '$(ManifestPath)' | ConvertFrom-Json; $version = $manifest.version_number; $zip = '$(PackageOutputPath)\PeakIntiface-Package-' + $version + '.zip'; if (Test-Path $zip) { Remove-Item $zip -Force }; Compress-Archive -Path '$(PackageRoot)\*' -DestinationPath $zip -CompressionLevel Optimal; Write-Host ('Created: ' + $zip)&quot;" />
 	</Target>
 
 </Project>
