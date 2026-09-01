@@ -13,19 +13,14 @@ Connects PEAK gameplay events to Intiface/Buttplug compatible devices.
 
 1. Install the mod.
 2. Start Intiface Central.
-3. Start the Intiface server.
-4. Launch PEAK.
-5. Configure the Intiface IP and port in the mod settings.
+3. Start PEAK.
+4. Set the IP address and port in the mod's configuration to match Intiface Central's settings. (Defaults to 127.0.0.1:12345)
+5. Connect your Buttplug compatible device to Intiface Central.
+6. Enjoy the game with your device!
 
-Default server:
+## Features
 
-- IP: `127.0.0.1`
-- Port: `12345`
-
-## Current triggers
-
-- Normal climbing
-- Rope climbing
-- Vine climbing
-- Sprinting
-- Status effects
+- Connects PEAK gameplay events to Intiface/Buttplug compatible devices.
+- Supports multiple devices and events at once.
+- Customizable settings for each event.
+- Easy to use and configure.
