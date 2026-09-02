@@ -76,6 +76,9 @@ namespace PeakIntiface.Toy
         {
             // Check if the ButtplugManager is connected before trying to stop devices
             if (!buttplugManager.IsConnected) return;
+
+            sourceIntensities.Clear();
+
             // Attempt to stop all devices and handle any exceptions that may occur
             try
             {

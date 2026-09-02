@@ -15,6 +15,8 @@ namespace PeakIntiface
         public static ConfigEntry<string> ServerIP;
         public static ConfigEntry<int> ServerPort;
         public static ConfigEntry<float> MaximumIntensity;
+        public static ConfigEntry<bool> EmergencyStopEnabled;
+        public static ConfigEntry<KeyCode> EmergencyStopKey;
         // Config for when caried or watching a player
         public static ConfigEntry<bool> UseCarried;
         public static ConfigEntry<bool> UseSpectate;
@@ -115,9 +117,8 @@ namespace PeakIntiface
                 new ConfigDescription("Maximumtoy intensity from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
             ServerIP = config.Bind("General", "Server IP", "127.0.0.1", "IP address of the Intiface Server");
             ServerPort = config.Bind("General", "Server Port", 12345, "Port of the Intiface Server");
-            // TODo: Fix this, it currently has a problem inside of ButtplugManager
-            //ServerIP.SettingChanged += ServerAdressChnaged;
-            //ServerPort.SettingChanged += ServerAdressChnaged;
+            EmergencyStopEnabled = config.Bind("General", "Emergency Stop Enabled", true, "Enable or Disable Emergency Stop");
+            EmergencyStopKey = config.Bind("General", "Emergency Stop Key", KeyCode.F10, "Key to trigger Emergency Stop");
 
             UseCarried = config.Bind(new ConfigDefinition("Player State", "Use Carried"), true,
                 new ConfigDescription("Use the player who is carring you for triggers"));

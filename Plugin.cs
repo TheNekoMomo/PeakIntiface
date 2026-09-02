@@ -3,6 +3,7 @@ using BepInEx;
 using PeakIntiface.Buttplug;
 using PeakIntiface.Toy;
 using PeakIntiface.Triggers;
+using UnityEngine;
 
 namespace PeakIntiface
 {
@@ -40,6 +41,14 @@ namespace PeakIntiface
 
         private void Update()
         {
+            // Check Emergency Stop first, as it should override all other triggers
+            if (ConfigManager.EmergencyStopEnabled.Value && Input.GetKeyDown(ConfigManager.EmergencyStopKey.Value))
+            {
+                ToyController?.StopVibrationAsync();
+                ConfigManager.Enabled.Value = false;
+                return;
+            }
+
             // Run the Trigger updates only if the plugin is enabled, the ToyController is initialized, and the ButtplugManager is connected
             if (!ConfigManager.Enabled.Value || ToyController == null || !ButtplugManager.IsConnected) return;
             MovementTrigger?.Update();
