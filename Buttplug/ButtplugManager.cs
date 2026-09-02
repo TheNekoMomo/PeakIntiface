@@ -20,7 +20,7 @@ namespace PeakIntiface.Buttplug
             this.logger = logger;
         }
 
-        public async Task StartReconnecting(string ip, int port)
+        public async Task StartReconnecting()
         {
             if (reconnecting) return;
             reconnecting = true;
@@ -30,12 +30,10 @@ namespace PeakIntiface.Buttplug
                 if (!IsConnected)
                 {
                     logger.LogInfo("Retrying reconnecting");
-                    await ConnectAsync(ip, port);
+                    await ConnectAsync(ConfigManager.ServerIP.Value, ConfigManager.ServerPort.Value);
                 }
-
                 await Task.Delay(5000);
             }
-            reconnecting = false;
         }
         private async Task ConnectAsync(string ip, int port)
         {
@@ -51,7 +49,7 @@ namespace PeakIntiface.Buttplug
                 client.DeviceAdded += OnDeviceAdded;
                 client.DeviceRemoved += OnDeviceRemoved;
 
-                ButtplugWebsocketConnector connector =new ButtplugWebsocketConnector(new Uri(address));
+                ButtplugWebsocketConnector connector = new ButtplugWebsocketConnector(new Uri(address));
                 await client.ConnectAsync(connector);
 
                 logger.LogInfo("Connected to Intiface!");

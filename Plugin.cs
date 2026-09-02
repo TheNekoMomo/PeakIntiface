@@ -27,8 +27,8 @@ namespace PeakIntiface
             _ = new ConfigManager(Config);
 
             ButtplugManager = new ButtplugManager(Logger);
-            if (ConfigManager.Enabled.Value) _ = ButtplugManager.StartReconnecting(ConfigManager.ServerIP.Value, ConfigManager.ServerPort.Value);
-            ToyController = new ToyController(ButtplugManager, Logger);
+            if (ConfigManager.Enabled.Value) _ = ButtplugManager.StartReconnecting();
+                ToyController = new ToyController(ButtplugManager, Logger);
 
             MovementTrigger = new MovementTrigger(Logger);
             StatustEffectTrigger = new StatustEffectTrigger(Logger);

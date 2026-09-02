@@ -1,4 +1,5 @@
-﻿using BepInEx;
+﻿using System;
+using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using PeakIntiface.Buttplug;
@@ -114,6 +115,9 @@ namespace PeakIntiface
                 new ConfigDescription("Maximumtoy intensity from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
             ServerIP = config.Bind("General", "Server IP", "127.0.0.1", "IP address of the Intiface Server");
             ServerPort = config.Bind("General", "Server Port", 12345, "Port of the Intiface Server");
+            // TODo: Fix this, it currently has a problem inside of ButtplugManager
+            //ServerIP.SettingChanged += ServerAdressChnaged;
+            //ServerPort.SettingChanged += ServerAdressChnaged;
 
             UseCarried = config.Bind(new ConfigDefinition("Player State", "Use Carried"), true,
                 new ConfigDescription("Use the player who is carring you for triggers"));
@@ -257,13 +261,13 @@ namespace PeakIntiface
                 new ConfigDescription("How long the toy should go when you ragdoll.", new AcceptableValueRange<float>(100f, 10000f)));
         }
 
-        public void EnabledSettingChnaged(object sender, System.EventArgs e)
+        private void EnabledSettingChnaged(object sender, System.EventArgs e)
         {
             if (Plugin.ButtplugManager == null) return;
 
             if (Enabled.Value)
             {
-                _ = Plugin.ButtplugManager.StartReconnecting(ServerIP.Value, ServerPort.Value);
+                _ = Plugin.ButtplugManager.StartReconnecting();
             }
             else
             {
