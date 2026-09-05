@@ -18,30 +18,37 @@ namespace PeakIntiface.Triggers
             Character character = TriggerUtils.GetCharacterForStats();
             if (character == null) return;
 
-            double intensity = 0.0;
             float currentStamina = character.data.currentStamina;
 
             if (character.data.isClimbing && ConfigManager.NormalClimbingTriggerEnabled.Value)
             {
-                intensity = TriggerUtils.CalculateIntensity(currentStamina - 1,
-                    ConfigManager.NormalClimbingTriggerMaximumIntensity.Value, ConfigManager.NormalClimbingTriggerMinimumIntensity.Value);
+                double intensity = ConfigManager.NormalClimbingTriggerMinimumIntensity.Value +
+                    (1 - currentStamina) * (ConfigManager.NormalClimbingTriggerMaximumIntensity.Value - ConfigManager.NormalClimbingTriggerMinimumIntensity.Value);
+
+                Plugin.ToyController.SetSourceIntensity("movement", intensity);
             }
             else if (character.data.isRopeClimbing && ConfigManager.RopeClimbingTriggerEnabled.Value)
             {
-                intensity = TriggerUtils.CalculateIntensity(currentStamina - 1,
-                    ConfigManager.RopeClimbingTriggerMaximumIntensity.Value, ConfigManager.RopeClimbingTriggerMinimumIntensity.Value);
+                double intensity = ConfigManager.RopeClimbingTriggerMinimumIntensity.Value +
+                    (1 - currentStamina) * (ConfigManager.RopeClimbingTriggerMaximumIntensity.Value - ConfigManager.RopeClimbingTriggerMinimumIntensity.Value);
+                Plugin.ToyController.SetSourceIntensity("movement", intensity);
             }
             else if (character.data.isVineClimbing && ConfigManager.VineClimbingTriggerEnabled.Value)
             {
-                intensity = TriggerUtils.CalculateIntensity(currentStamina - 1,
-                    ConfigManager.VineClimbingTriggerMaximumIntensity.Value, ConfigManager.VineClimbingTriggerMinimumIntensity.Value);
+                double intensity = ConfigManager.VineClimbingTriggerMinimumIntensity.Value +
+                    (1 - currentStamina) * (ConfigManager.VineClimbingTriggerMaximumIntensity.Value - ConfigManager.VineClimbingTriggerMinimumIntensity.Value);
+                Plugin.ToyController.SetSourceIntensity("movement", intensity);
             }
             else if (character.data.isSprinting && ConfigManager.SprintingTriggerEnabled.Value)
             {
-                intensity = TriggerUtils.CalculateIntensity(currentStamina - 1,
-                    ConfigManager.SprintingTriggerMaximumIntensity.Value, ConfigManager.SprintingTriggerMinimumIntensity.Value);
+                double intensity = ConfigManager.SprintingTriggerMinimumIntensity.Value +
+                    (1 - currentStamina) * (ConfigManager.SprintingTriggerMaximumIntensity.Value - ConfigManager.SprintingTriggerMinimumIntensity.Value);
+                Plugin.ToyController.SetSourceIntensity("movement", intensity);
             }
-            TriggerUtils.SetVibration("movement", intensity);
+            else
+            {
+                TriggerUtils.SetVibration("movement", 0);
+            }
         }
     }
 }
