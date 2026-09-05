@@ -37,7 +37,7 @@ namespace PeakIntiface.Toy
             // Check if the ButtplugManager is connected before trying to control devices
             if (!buttplugManager.IsConnected) return;
 
-            double highestIntensity = 0.0;
+            double highestIntensity = ConfigManager.ConstantVibration.Value;
             string highestSource = "None";
 
             // Iterate through all source intensities to find the highest one
@@ -52,15 +52,8 @@ namespace PeakIntiface.Toy
 
             if (highestIntensity <= 0.0)
             {
-                if (ConfigManager.ConstantVibration.Value == 0)
-                {
-                    highestIntensity = ConfigManager.ConstantVibration.Value;
-                }
-                else
-                {
-                    await StopVibrationAsync();
-                    return;
-                }
+                await StopVibrationAsync();
+                return;
             }
 
             // Iterate through all connected devices and send the vibration command
