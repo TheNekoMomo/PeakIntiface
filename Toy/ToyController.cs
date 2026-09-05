@@ -52,8 +52,15 @@ namespace PeakIntiface.Toy
 
             if (highestIntensity <= 0.0)
             {
-                await StopVibrationAsync();
-                return;
+                if (ConfigManager.ConstantVibration.Value == 0)
+                {
+                    highestIntensity = ConfigManager.ConstantVibration.Value;
+                }
+                else
+                {
+                    await StopVibrationAsync();
+                    return;
+                }
             }
 
             // Iterate through all connected devices and send the vibration command

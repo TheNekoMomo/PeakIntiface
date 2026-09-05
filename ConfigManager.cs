@@ -17,6 +17,7 @@ namespace PeakIntiface
         public static ConfigEntry<float> MaximumIntensity;
         public static ConfigEntry<bool> EmergencyStopEnabled;
         public static ConfigEntry<KeyCode> EmergencyStopKey;
+        public static ConfigEntry<float> ConstantVibration;
         // Config for when caried or watching a player
         public static ConfigEntry<bool> UseCarried;
         public static ConfigEntry<bool> UseSpectate;
@@ -119,6 +120,8 @@ namespace PeakIntiface
             ServerPort = config.Bind("General", "Server Port", 12345, "Port of the Intiface Server");
             EmergencyStopEnabled = config.Bind("General", "Emergency Stop Enabled", true, "Enable or Disable Emergency Stop");
             EmergencyStopKey = config.Bind("General", "Emergency Stop Key", KeyCode.F10, "Key to trigger Emergency Stop");
+            ConstantVibration = config.Bind("General", "Constant Vibration", 0.0f,
+                new ConfigDescription("Constant vibration intensity from 0.0 to 1.0", new AcceptableValueRange<float>(0.0f, 1)));
 
             UseCarried = config.Bind(new ConfigDefinition("Player State", "Use Carried"), true,
                 new ConfigDescription("Use the player who is carring you for triggers"));
