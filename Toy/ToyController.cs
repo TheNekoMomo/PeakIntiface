@@ -36,9 +36,9 @@ namespace PeakIntiface.Toy
         {
             // Check if the ButtplugManager is connected before trying to control devices
             if (!buttplugManager.IsConnected) return;
-
+            // Initialize the highest intensity as the constant vibration so that it will use that if its higher than any source intensity
             double highestIntensity = ConfigManager.ConstantVibration.Value;
-            string highestSource = "None";
+            string highestSource = "ConstantVibration";
 
             // Iterate through all source intensities to find the highest one
             foreach (KeyValuePair<string, double> sourceIntensity in sourceIntensities)
