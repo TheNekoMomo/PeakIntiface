@@ -3,6 +3,7 @@ using BepInEx;
 using BepInEx.Configuration;
 using BepInEx.Logging;
 using PeakIntiface.Buttplug;
+using PeakIntiface.Toy;
 using UnityEngine;
 
 namespace PeakIntiface
@@ -113,7 +114,7 @@ namespace PeakIntiface
         private void LoadConfig()
         {
             Enabled = config.Bind("General", "Enabled", true, "Enable or Disable toy control");
-            Enabled.SettingChanged += EnabledSettingChnaged;
+            Enabled.SettingChanged += EnabledSettingChanged;
             MaximumIntensity = config.Bind("General", "Maximum Intensity", 0.7f,
                 new ConfigDescription("Maximumtoy intensity from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
             ServerIP = config.Bind("General", "Server IP", "127.0.0.1", "IP address of the Intiface Server");
@@ -122,6 +123,7 @@ namespace PeakIntiface
             EmergencyStopKey = config.Bind("General", "Emergency Stop Key", KeyCode.F10, "Key to trigger Emergency Stop");
             ConstantVibration = config.Bind("General", "Constant Vibration", 0.0f,
                 new ConfigDescription("Constant vibration intensity from 0.0 to 1.0", new AcceptableValueRange<float>(0.0f, 1)));
+            ConstantVibration.SettingChanged += ConstantVibrationSettingChanged;
 
             UseCarried = config.Bind(new ConfigDefinition("Player State", "Use Carried"), true,
                 new ConfigDescription("Use the player who is carring you for triggers"));
@@ -265,7 +267,15 @@ namespace PeakIntiface
                 new ConfigDescription("How long the toy should go when you ragdoll.", new AcceptableValueRange<float>(100f, 10000f)));
         }
 
-        private void EnabledSettingChnaged(object sender, System.EventArgs e)
+        private void ConstantVibrationSettingChanged(object sender, EventArgs e)
+        {
+            if (ConstantVibration.Value < 0.01f)
+            {
+                Plugin.ToyController?.StopVibrationAsync();
+            }
+        }
+
+        private void EnabledSettingChanged(object sender, System.EventArgs e)
         {
             if (Plugin.ButtplugManager == null) return;
 
