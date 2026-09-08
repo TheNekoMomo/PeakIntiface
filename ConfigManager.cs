@@ -22,19 +22,7 @@ namespace PeakIntiface
         // Config for when caried or watching a player
         public static ConfigEntry<bool> UseCarried;
         public static ConfigEntry<bool> UseSpectate;
-        // Config entries for movement triggers
-        public static ConfigEntry<bool> NormalClimbingTriggerEnabled;
-        public static ConfigEntry<float> NormalClimbingTriggerMaximumIntensity;
-        public static ConfigEntry<float> NormalClimbingTriggerMinimumIntensity;
-        public static ConfigEntry<bool> RopeClimbingTriggerEnabled;
-        public static ConfigEntry<float> RopeClimbingTriggerMaximumIntensity;
-        public static ConfigEntry<float> RopeClimbingTriggerMinimumIntensity;
-        public static ConfigEntry<bool> VineClimbingTriggerEnabled;
-        public static ConfigEntry<float> VineClimbingTriggerMaximumIntensity;
-        public static ConfigEntry<float> VineClimbingTriggerMinimumIntensity;
-        public static ConfigEntry<bool> SprintingTriggerEnabled;
-        public static ConfigEntry<float> SprintingTriggerMaximumIntensity;
-        public static ConfigEntry<float> SprintingTriggerMinimumIntensity;
+
         // Config entries for status effect triggers
         public static ConfigEntry<bool> InjuryTriggerEnabled;
         public static ConfigEntry<float> InjuryTriggerMaximumIntensity;
@@ -129,32 +117,6 @@ namespace PeakIntiface
                 new ConfigDescription("Use the player who is carring you for triggers"));
             UseSpectate = config.Bind(new ConfigDefinition("Player State", "Use Spectate"), true,
                 new ConfigDescription("Use the player who you are Spectating for triggers"));
-
-            // Load movement trigger settings
-            // Normal Climbing Trigger
-            NormalClimbingTriggerEnabled = config.Bind("Movement", "Normal Climbing Trigger Enabled", true, "Enable or Disable Normal Climbing Trigger");
-            NormalClimbingTriggerMaximumIntensity = config.Bind("Movement", "Normal Climbing Trigger Maximum Intensity", 0.7f,
-                new ConfigDescription("Maximum intensity for Normal Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            NormalClimbingTriggerMinimumIntensity = config.Bind("Movement", "Normal Climbing Trigger Minimum Intensity", 0.1f,
-                new ConfigDescription("Minimum intensity for Normal Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            // Rope Climbing Trigger
-            RopeClimbingTriggerEnabled = config.Bind("Movement", "Rope Climbing Trigger Enabled", true, "Enable or Disable Rope Climbing Trigger");
-            RopeClimbingTriggerMaximumIntensity = config.Bind("Movement", "Rope Climbing Trigger Maximum Intensity", 0.7f,
-                new ConfigDescription("Maximum intensity for Rope Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            RopeClimbingTriggerMinimumIntensity = config.Bind("Movement", "Rope Climbing Trigger Minimum Intensity", 0.1f,
-                new ConfigDescription("Minimum intensity for Rope Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            // Vine Climbing Trigger
-            VineClimbingTriggerEnabled = config.Bind("Movement", "Vine Climbing Trigger Enabled", true, "Enable or Disable Vine Climbing Trigger");
-            VineClimbingTriggerMaximumIntensity = config.Bind("Movement", "Vine Climbing Trigger Maximum Intensity", 0.7f,
-                new ConfigDescription("Maximum intensity for Vine Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            VineClimbingTriggerMinimumIntensity = config.Bind("Movement", "Vine Climbing Trigger Minimum Intensity", 0.1f,
-                new ConfigDescription("Minimum intensity for Vine Climbing Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            // Sprinting Trigger
-            SprintingTriggerEnabled = config.Bind("Movement", "Sprinting Trigger Enabled", true, "Enable or Disable Sprinting Trigger");
-            SprintingTriggerMaximumIntensity = config.Bind("Movement", "Sprinting Trigger Maximum Intensity", 0.7f,
-                new ConfigDescription("Maximum intensity for Sprinting Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
-            SprintingTriggerMinimumIntensity = config.Bind("Movement", "Sprinting Trigger Minimum Intensity", 0.1f,
-                new ConfigDescription("Minimum intensity for Sprinting Trigger from 0.0 to 1.0", new AcceptableValueRange<float>(0.01f, 1)));
 
             // Load status effect trigger settings
             InjuryTriggerEnabled = config.Bind("Triggers", "Injury Trigger Enabled", true, "Enable or Disable Injury Trigger");
